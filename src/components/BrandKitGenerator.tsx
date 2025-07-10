@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Loader2, Copy, Check, RotateCcw, Palette } from 'lucide-react';
+import {  Loader2, Copy, Check, RotateCcw, Palette } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { generateContent } from '../services/aiService';
 import { formatPrompt } from '../utils/formatPrompt';
@@ -16,7 +16,7 @@ interface BrandKitGeneratorProps {
   onBack: () => void;
 }
 
-const BrandKitGenerator: React.FC<BrandKitGeneratorProps> = ({ onAddToHistory, onBack }) => {
+const BrandKitGenerator: React.FC<BrandKitGeneratorProps> = ({ onAddToHistory }) => {
   const [formData, setFormData] = useState<FormData>({
     productName: '',
     productDescription: ''

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Loader2, Copy, Check, RotateCcw, ArrowLeft } from 'lucide-react';
+import { Send, Loader2, Copy, Check, RotateCcw } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { generateContent } from '../services/aiService';
 import { formatPrompt } from '../utils/formatPrompt';
@@ -17,7 +17,7 @@ interface CopyGeneratorProps {
   onBack: () => void;
 }
 
-const CopyGenerator: React.FC<CopyGeneratorProps> = ({ onAddToHistory, onBack }) => {
+const CopyGenerator: React.FC<CopyGeneratorProps> = ({ onAddToHistory }) => {
   const [formData, setFormData] = useState<FormData>({
     productName: '',
     productDescription: '',

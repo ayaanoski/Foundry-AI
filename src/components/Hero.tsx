@@ -69,26 +69,25 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
               FOUNDRY.AI
             </h1>
           </div>
-
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.3 }}
             className="flex items-center justify-center space-x-2 mb-6"
           >
-            <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-white/60" />
-            <p className="text-base sm:text-xl md:text-2xl text-white/80 font-light">
+            <Brain className="w-6 h-6 text-white/60" />
+            <p className="text-xl md:text-2xl text-white/80 font-light">
               AI-Powered Marketing & Brand Intelligence
             </p>
-            <Star className="w-5 h-5 sm:w-6 sm:h-6 text-white/60" />
+            <Star className="w-6 h-6 text-white/60" />
           </motion.div>
         </motion.div>
-
+        
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-sm sm:text-base text-white/60 mb-4 max-w-2xl mx-auto"
+          className="text-lg text-white/60 mb-4 max-w-2xl mx-auto"
         >
           Powered by Advanced Neural Networks & IO.net Infrastructure
         </motion.p>
@@ -98,12 +97,16 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-16 max-w-4xl mx-auto"
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 max-w-4xl mx-auto"
         >
           {stats.map((stat, index) => (
-            <motion.div key={index} className="text-center" whileHover={{ scale: 1.05 }}>
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1">{stat.number}</div>
-              <div className="text-white/60 text-xs sm:text-sm">{stat.label}</div>
+            <motion.div
+              key={index}
+              className="text-center"
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.number}</div>
+              <div className="text-white/60 text-sm">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -116,16 +119,17 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
           className="mb-20"
         >
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 sm:mb-8 text-center sm:text-left">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
               Transform Your Marketing with AI Precision
             </h2>
-            <p className="text-white/70 text-base sm:text-lg mb-8 leading-relaxed text-center sm:text-left">
-              Foundry.AI combines cutting-edge artificial intelligence with proven marketing psychology to generate
-              high-converting copy and comprehensive brand identities. Whether you're launching a startup or scaling
-              an enterprise, our AI agents deliver professional-grade marketing assets in seconds, not weeks.
+            <p className="text-white/70 text-lg mb-8 leading-relaxed">
+              Foundry.AI combines cutting-edge artificial intelligence with proven marketing psychology 
+              to generate high-converting copy and comprehensive brand identities. Whether you're launching 
+              a startup or scaling an enterprise, our AI agents deliver professional-grade marketing assets 
+              in seconds, not weeks.
             </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-left">
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
               <div className="bg-white/5 rounded-xl p-6 border border-white/10">
                 <Sparkles className="w-8 h-8 text-white mb-4" />
                 <h3 className="text-white font-bold mb-2">Instant Generation</h3>
@@ -145,9 +149,9 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
           </div>
         </motion.div>
 
-        {/* Feature Sections */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 mb-20 px-2 sm:px-6">
-          {/* Copy Generator */}
+        {/* Main Feature Sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+          {/* Copy Generator Section */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -155,22 +159,25 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
             className="group relative"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl blur-xl group-hover:from-white/10 transition-all duration-500"></div>
-            <div className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl p-6 sm:p-8 border border-white/10 hover:border-white/20 transition-all duration-500 h-full">
+            <div className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 h-full">
               <div className="flex items-center justify-center mb-6">
                 <div className="relative">
                   <Sparkles className="w-12 h-12 text-white" />
                   <div className="absolute inset-0 w-12 h-12 bg-white/20 rounded-full blur-lg animate-pulse"></div>
                 </div>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Copy Intelligence</h2>
-              <p className="text-white/70 mb-8 leading-relaxed text-sm sm:text-base">
-                Generate high-converting marketing copy that drives action. Our AI analyzes millions of successful
-                campaigns to create compelling headlines, captions, emails, and landing pages.
+              
+              <h2 className="text-3xl font-bold text-white mb-4">Copy Intelligence</h2>
+              <p className="text-white/70 mb-8 leading-relaxed">
+                Generate high-converting marketing copy that drives action. Our AI analyzes millions 
+                of successful campaigns to create compelling headlines, captions, emails, and landing pages 
+                that resonate with your audience and maximize conversions.
               </p>
+              
               <div className="grid grid-cols-1 gap-4 mb-8">
                 {copyFeatures.map((feature, index) => (
-                  <motion.div
-                    key={index}
+                  <motion.div 
+                    key={index} 
                     className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors"
                     whileHover={{ x: 5 }}
                   >
@@ -182,9 +189,10 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
                   </motion.div>
                 ))}
               </div>
+
               <motion.button
                 onClick={onCopyGeneratorClick}
-                className="w-full bg-white text-black py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg hover:bg-white/90 transition-all duration-300 group flex items-center justify-center relative overflow-hidden"
+                className="w-full bg-white text-black py-4 rounded-xl font-bold text-lg hover:bg-white/90 transition-all duration-300 group flex items-center justify-center relative overflow-hidden"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -196,7 +204,7 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
             </div>
           </motion.div>
 
-          {/* Brand Kit */}
+          {/* Brand Kit Section */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -204,22 +212,25 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
             className="group relative"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent rounded-2xl blur-xl group-hover:from-purple-500/20 transition-all duration-500"></div>
-            <div className="relative bg-gradient-to-br from-[#1a1a1a] via-[#1a1a1a] to-[#2a1a2a] rounded-2xl p-6 sm:p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all duration-500 h-full">
+            <div className="relative bg-gradient-to-br from-[#1a1a1a] via-[#1a1a1a] to-[#2a1a2a] rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all duration-500 h-full">
               <div className="flex items-center justify-center mb-6">
                 <div className="relative">
                   <Palette className="w-12 h-12 text-white" />
                   <div className="absolute inset-0 w-12 h-12 bg-purple-500/30 rounded-full blur-lg animate-pulse"></div>
                 </div>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Brand Intelligence</h2>
-              <p className="text-white/70 mb-8 leading-relaxed text-sm sm:text-base">
-                Build a complete brand foundation from scratch — color palettes, audience psychology, brand voice, and a
-                full growth strategy.
+              
+              <h2 className="text-3xl font-bold text-white mb-4">Brand Intelligence</h2>
+              <p className="text-white/70 mb-8 leading-relaxed">
+                Build a complete brand foundation from the ground up. Our AI creates comprehensive 
+                brand identities including visual themes, color psychology, target audience analysis, 
+                voice guidelines, and strategic marketing roadmaps tailored to your vision.
               </p>
+              
               <div className="grid grid-cols-1 gap-4 mb-8">
                 {brandFeatures.map((feature, index) => (
-                  <motion.div
-                    key={index}
+                  <motion.div 
+                    key={index} 
                     className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors"
                     whileHover={{ x: 5 }}
                   >
@@ -231,9 +242,10 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
                   </motion.div>
                 ))}
               </div>
+
               <motion.button
                 onClick={onBrandKitClick}
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg hover:from-purple-500 hover:to-purple-400 transition-all duration-300 group flex items-center justify-center relative overflow-hidden"
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white py-4 rounded-xl font-bold text-lg hover:from-purple-500 hover:to-purple-400 transition-all duration-300 group flex items-center justify-center relative overflow-hidden"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -245,7 +257,6 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
             </div>
           </motion.div>
         </div>
-
         {/* Trust Indicators */}
         <motion.div
           initial={{ opacity: 0 }}
