@@ -1,10 +1,10 @@
 export const formatPrompt = (productName: string, productDescription: string, contentType: string): string => {
   const prompts = {
-    'facebook-ad': `Create compelling Facebook/Google ad headlines for "${productName}". 
+    'facebook-ad': `Product: "${productName}"
 
-Product Description: ${productDescription}
+Description: ${productDescription}
 
-Generate 3-5 different headlines that are:
+Generate 3-5 Facebook/Google ad headlines that are:
 - Attention-grabbing and click-worthy
 - Under 40 characters each
 - Focused on benefits and results
@@ -12,16 +12,18 @@ Generate 3-5 different headlines that are:
 
 Format as numbered list.`,
 
-    'instagram-caption': `Write an engaging Instagram caption for "${productName}".
+    'instagram-caption': `Product: "${productName}"
 
-Product Description: ${productDescription}
+Description: ${productDescription}
 
-The caption should be:
+Instagram caption:
 - Conversational and authentic
 - Include relevant hashtags
-- Have a clear call-to-action
-- Be engaging and shareable
-- Around 150-200 words`,
+- Clear call-to-action
+- Engaging and shareable
+- Around 150–200 words
+- No introductory fluff or explanations
+`,
 
     'cold-email': `Write a cold outreach email for "${productName}".
 
@@ -35,65 +37,64 @@ The email should be:
 - End with a specific call-to-action
 - Keep it under 150 words`,
 
-    'landing-page': `Create compelling landing page copy for "${productName}".
+    'landing-page': `Product: "${productName}"
 
-Product Description: ${productDescription}
+Description: ${productDescription}
 
-Include:
-- Powerful headline
+Landing page content:
+- Headline
 - Subheadline
-- 3-4 key benefits
+- 3–4 key benefits
 - Social proof statement
 - Clear call-to-action
-- Urgency/scarcity element
+- Urgency or scarcity element
 
-Structure it as a complete landing page flow.`,
+Write in complete landing page format without intros or explanations.`,
 
-    'brand-kit': `Generate a complete brand kit for "${productName}".
+    'brand-kit': `Product: "${productName}"
 
-Product Description: ${productDescription}
+Description: ${productDescription}
 
-Create a comprehensive branding foundation including:
+Create a brand kit with the following:
 
 🎨 BRAND THEME & MOOD
-- 5-7 descriptive keywords that capture the brand essence
-- Visual style direction (modern, vintage, minimalist, bold, etc.)
+- 5–7 descriptive keywords
+- Visual style direction
 - Brand personality traits
 
 🎯 TARGET AUDIENCE
-- Primary demographic (age, gender, income, lifestyle)
+- Primary demographic
 - Pain points and motivations
-- Where they spend time (online/offline)
+- Online/offline hangouts
 
 🎨 COLOR PALETTE
-- Primary color with hex code
-- Secondary color with hex code  
-- Accent color with hex code
-- Neutral colors (2-3) with hex codes
-- Brief explanation of color psychology
+- Primary color (hex)
+- Secondary color (hex)
+- Accent color (hex)
+- Neutral colors (2–3 with hex)
+- Brief color psychology
 
 🧾 BRAND VOICE & TONE
-- Communication style (professional, casual, friendly, authoritative)
-- Key messaging pillars (3-4 main themes)
+- Communication style
+- Key messaging pillars
 - Words to use vs. avoid
 
 🗣️ TAGLINE SUGGESTIONS
-- 3-5 memorable tagline options
-- Each under 8 words
-- Focus on benefits and emotion
+- 3–5 taglines (under 8 words)
+- Focused on benefits/emotion
 
 📢 MARKETING STRATEGIES
 Online:
-- 3-4 digital marketing channels
-- Content strategy suggestions
+- 3–4 channels
+- Content strategy
 - Social media approach
 
 Offline:
-- 2-3 traditional marketing ideas
-- Partnership opportunities
-- Event/experiential concepts
+- 2–3 marketing ideas
+- Partnerships
+- Event concepts
 
-Format with clear sections and emojis for visual appeal.`
+Avoid intro explanations — deliver only the requested content in structured format.`
   };
 
   return prompts[contentType as keyof typeof prompts] || prompts['facebook-ad'];
