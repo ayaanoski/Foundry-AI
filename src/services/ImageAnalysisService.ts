@@ -1,3 +1,4 @@
+// Define the structure for the analysis response
 interface ImageAnalysisResponse {
   enhancedDescription: string;
   keyFeatures: string[];
@@ -5,31 +6,39 @@ interface ImageAnalysisResponse {
   uniqueSellingPoints: string[];
 }
 
+/**
+ * Analyzes product images using a vision AI model to generate marketing insights.
+ * @param images - An array of base64 or URL strings for the product images.
+ * @returns A promise that resolves to an ImageAnalysisResponse object.
+ */
 export const analyzeProductImages = async (images: string[]): Promise<ImageAnalysisResponse> => {
   const apiKey = import.meta.env.VITE_IO_INTELLIGENCE_API_KEY;
 
   if (!apiKey) {
+    console.error('API key not configured.');
     throw new Error('API key not configured. Please add VITE_IO_INTELLIGENCE_API_KEY to your .env file.');
   }
 
   try {
-    // Prepare the content array with text and images
-    const content = [
+    // Prepare the content array with a more robust prompt and the images
+    const content: any[] = [
       {
         type: "text",
-        text: `Analyze these product images and provide:
-1. An enhanced, detailed product description (2-3 sentences)
-2. Key visual features you can identify
-3. Target audience based on the product appearance
-4. Unique selling points visible in the images
-
-Respond in JSON format with fields: enhancedDescription, keyFeatures (array), targetAudience (string), uniqueSellingPoints (array).
-Focus on what makes this product appealing and marketable based on visual analysis.`
+        // The prompt is refined to be more direct and enforce the JSON-only output rule.
+        text: `Analyze the following product images. Your task is to provide a concise marketing analysis.
+        
+        Respond ONLY with a single, valid JSON object. Do not include any introductory text, explanations, or markdown formatting like \`\`\`json.
+        
+        The JSON object must have the following structure:
+        - enhancedDescription: string (A compelling 2-3 sentence product description)
+        - keyFeatures: string[] (An array of key visual features)
+        - targetAudience: string (A description of the ideal customer)
+        - uniqueSellingPoints: string[] (An array of selling points visible in the images)`
       }
     ];
 
     // Add each image to the content array
-    images.forEach((imageData, index) => {
+    images.forEach(imageData => {
       content.push({
         type: "image_url",
         image_url: {
@@ -43,15 +52,19 @@ Focus on what makes this product appealing and marketable based on visual analys
       messages: [
         {
           role: "system",
-          content: "You are an expert product analyst and marketing specialist. Analyze product images to create compelling, accurate descriptions that highlight key features, benefits, and market appeal. Focus on visual elements, design quality, functionality, and target market positioning."
+          // The system prompt is enhanced to reinforce the expected output format.
+          content: "You are an expert product analyst and marketing specialist. Your sole function is to analyze product images and return the analysis as a single, valid JSON object, adhering strictly to the user's requested format. Do not add any extra commentary."
         },
         {
           role: "user",
           content: content
         }
       ],
-      max_tokens: 800,
-      temperature: 0.7
+      // **CRITICAL FIX**: Enabling JSON mode forces the model to output valid JSON.
+      // This is the most reliable way to prevent parsing errors.
+      response_format: { type: "json_object" },
+      max_tokens: 1024, // Increased slightly to ensure enough space for detailed responses
+      temperature: 0.5 // Lowered slightly for more consistent and factual JSON output
     };
 
     const response = await fetch('https://api.intelligence.io.solutions/api/v1/chat/completions', {
@@ -64,43 +77,44 @@ Focus on what makes this product appealing and marketable based on visual analys
     });
 
     if (!response.ok) {
-      throw new Error(`AI API request failed: ${response.status} ${response.statusText}`);
+      // Improved error logging to capture more details from the failed API response.
+      const errorBody = await response.text();
+      throw new Error(`AI API request failed: ${response.status} ${response.statusText}. Response: ${errorBody}`);
     }
 
     const result = await response.json();
     const aiMessage = result.choices?.[0]?.message?.content;
 
     if (!aiMessage) {
-      throw new Error('No response from AI analysis');
+      throw new Error('AI analysis returned an empty response.');
     }
 
-    // Parse the JSON response
+    // **CRITICAL FIX**: The parsing logic is now safer and more informative.
     let analysis: ImageAnalysisResponse;
     try {
-      // Try to extract JSON from the response
-      const jsonMatch = aiMessage.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
-      const jsonString = jsonMatch ? jsonMatch[1] : aiMessage;
-      analysis = JSON.parse(jsonString);
+      // With `response_format: { type: "json_object" }`, the response should be a clean JSON string.
+      analysis = JSON.parse(aiMessage);
     } catch (parseError) {
-      // Fallback parsing if JSON extraction fails
-      analysis = {
-        enhancedDescription: "A high-quality product with excellent design and functionality, perfect for discerning customers who value both style and performance.",
-        keyFeatures: ["Premium quality", "Attractive design", "Functional features"],
-        targetAudience: "Quality-conscious consumers",
-        uniqueSellingPoints: ["Superior craftsmanship", "Distinctive design", "Excellent value"]
-      };
+      // If parsing fails (which is now unlikely), log the raw response and throw a specific error.
+      // This avoids silently failing and returning incorrect, generic data.
+      console.error('Failed to parse AI response as JSON.', {
+        error: parseError,
+        rawResponse: aiMessage,
+      });
+      throw new Error('The AI returned a response that was not in the expected JSON format.');
     }
 
-    // Validate and return the analysis
+    // The final validation is kept as a safeguard but is less likely to be needed.
     return {
-      enhancedDescription: analysis.enhancedDescription || "A premium product with exceptional quality and design.",
-      keyFeatures: Array.isArray(analysis.keyFeatures) ? analysis.keyFeatures : ["High quality", "Great design"],
-      targetAudience: analysis.targetAudience || "Quality-focused customers",
-      uniqueSellingPoints: Array.isArray(analysis.uniqueSellingPoints) ? analysis.uniqueSellingPoints : ["Premium quality", "Unique design"]
+      enhancedDescription: analysis.enhancedDescription || "No description provided.",
+      keyFeatures: Array.isArray(analysis.keyFeatures) && analysis.keyFeatures.length > 0 ? analysis.keyFeatures : ["Not specified"],
+      targetAudience: analysis.targetAudience || "Not specified",
+      uniqueSellingPoints: Array.isArray(analysis.uniqueSellingPoints) && analysis.uniqueSellingPoints.length > 0 ? analysis.uniqueSellingPoints : ["Not specified"]
     };
 
   } catch (error) {
-    console.error('Image analysis error:', error);
-    throw new Error('Failed to analyze images. Please try again.');
+    console.error('An unexpected error occurred during image analysis:', error);
+    // Re-throw the error to be handled by the calling function.
+    throw error;
   }
 };

@@ -38,7 +38,7 @@ export const generateContent = async (prompt: string): Promise<string> => {
         model: modelId,
         messages,
         temperature: 0.7,
-        max_tokens: 1000,
+        max_tokens: 2048,
       }),
     });
 

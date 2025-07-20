@@ -1,10 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-  font-family: 'Rubik Mono One', monospace;
+  /* "Press Start 2P" is the new primary font.
+    'cursive' is the recommended fallback by Google Fonts for this specific font.
+  */
+  font-family: 'Press Start 2P', cursive;
 }
 
 body {

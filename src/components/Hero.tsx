@@ -1,7 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 import {
-  Zap,
   Sparkles,
   Palette,
   Target,
@@ -11,7 +10,7 @@ import {
   ArrowRight,
   Brain,
   Rocket,
-  Star
+  Star,
 } from 'lucide-react';
 
 interface HeroProps {
@@ -19,265 +18,178 @@ interface HeroProps {
   onBrandKitClick: () => void;
 }
 
+// A beautiful and performant falling stars background
+const StarsBackground = () => {
+  const [stars, setStars] = useState<any[]>([]);
+
+  useEffect(() => {
+    const generateStars = () => {
+      const newStars = Array.from({ length: 50 }).map(() => ({
+        id: Math.random(),
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        size: Math.random() * 2 + 1,
+        duration: Math.random() * 5 + 5, // Slower, more gentle fall
+      }));
+      setStars(newStars);
+    };
+    generateStars();
+  }, []);
+
+  return (
+    <div className="absolute inset-0 z-0 overflow-hidden bg-black">
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+      {stars.map((star) => (
+        <motion.div
+          key={star.id}
+          className="absolute rounded-full bg-white/80"
+          style={{
+            width: star.size,
+            height: star.size,
+            left: star.left,
+            top: '-10px',
+          }}
+          animate={{
+            y: '100vh',
+          }}
+          transition={{
+            duration: star.duration,
+            repeat: Infinity,
+            repeatType: 'loop',
+            ease: 'linear',
+            delay: Math.random() * 5,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) => {
+  const Section = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
+    const ref = React.useRef(null);
+    const isInView = useInView(ref, { once: true, margin: '-100px' });
+    return (
+      <motion.div
+        ref={ref}
+        className={className}
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+      >
+        {children}
+      </motion.div>
+    );
+  };
+
   const copyFeatures = [
-    { icon: Target, title: 'Facebook/Google Ads', desc: 'High-converting headlines that drive clicks and sales' },
-    { icon: MessageSquare, title: 'Instagram Captions', desc: 'Engaging social media content that builds community' },
-    { icon: Mail, title: 'Cold Emails', desc: 'Personalized outreach that gets responses and meetings' },
-    { icon: Globe, title: 'Landing Pages', desc: 'Persuasive copy that converts visitors into customers' }
+    { icon: Target, title: 'Ads That Convert', desc: 'Generate high-converting headlines for Facebook, Google, and more.' },
+    { icon: MessageSquare, title: 'Engaging Social Posts', desc: 'Create captivating Instagram captions that build your community.' },
+    { icon: Mail, title: 'Effective Cold Emails', desc: 'Craft personalized outreach emails that guarantee responses.' },
+    { icon: Globe, title: 'Persuasive Landing Pages', desc: 'Develop compelling copy that turns visitors into loyal customers.' },
   ];
 
   const brandFeatures = [
-    { icon: Palette, title: 'Visual Identity', desc: 'Complete color palettes with psychology-backed hex codes' },
-    { icon: Target, title: 'Audience Intelligence', desc: 'Deep customer personas and behavioral insights' },
-    { icon: MessageSquare, title: 'Brand Voice', desc: 'Consistent messaging guidelines and tone frameworks' },
-    { icon: Rocket, title: 'Growth Strategy', desc: 'Comprehensive marketing roadmap for scale' }
-  ];
-
-  const stats = [
-    { number: '10K+', label: 'Copies Generated' },
-    { number: '500+', label: 'Brands Created' },
-    { number: '95%', label: 'Success Rate' },
-    { number: '24/7', label: 'AI Availability' }
+    { icon: Palette, title: 'Visual Identity', desc: 'Generate complete color palettes with psychology-backed hex codes.' },
+    { icon: Target, title: 'Audience Intelligence', desc: 'Build deep customer personas with actionable behavioral insights.' },
+    { icon: MessageSquare, title: 'Brand Voice & Tone', desc: 'Define consistent messaging guidelines and powerful tone frameworks.' },
+    { icon: Rocket, title: 'Strategic Growth Plan', desc: 'Receive a comprehensive marketing roadmap designed for scalability.' },
   ];
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative pt-16 pb-16 px-4 sm:px-6 md:px-8">
-      <div className="text-center max-w-7xl mx-auto w-full">
-        {/* Hero Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-8"
-        >
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6 mt-10">
-            <motion.div
-              className="relative"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            >
-              <img
-                src="/logo.png"
-                alt="Foundry.AI Logo"
-                className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 z-10 relative"
-              />
-              <div className="absolute inset-0 w-20 h-20 bg-white/10 rounded-full blur-xl sm:w-24 sm:h-24"></div>
-            </motion.div>
+    <section className="relative min-h-screen flex items-center justify-center pt-32 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <StarsBackground />
+      <div className="relative z-10 w-full max-w-7xl mx-auto space-y-20 sm:space-y-32">
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-white leading-none">
-              FOUNDRY.AI
-            </h1>
-          </div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="flex items-center justify-center space-x-2 mb-6"
-          >
-            <Brain className="w-6 h-6 text-white/60" />
-            <p className="text-xl md:text-2xl text-white/80 font-light">
-              AI-Powered Marketing & Brand Intelligence
+        <header className="text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: 'easeOut' }}>
+            <div className="flex flex-col items-center justify-center gap-4 mb-4">
+              <img src="/logo.png" alt="Foundry.AI Logo" className="w-40 h-40" />
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tighter text-center">
+                FOUNDRY.AI
+              </h1>
+            </div>
+            <p className="text-lg sm:text-xl md:text-2xl text-white/70 font-light text-center">
+              The Future of AI-Powered Marketing & Brand Intelligence
             </p>
-            <Star className="w-6 h-6 text-white/60" />
           </motion.div>
-        </motion.div>
-        
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg text-white/60 mb-4 max-w-2xl mx-auto"
-        >
-          Powered by Advanced Neural Networks & IO.net Infrastructure
-        </motion.p>
-
-        {/* Stats Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 max-w-4xl mx-auto"
-        >
-          {stats.map((stat, index) => (
-            <motion.div
-              key={index}
-              className="text-center"
-              whileHover={{ scale: 1.05 }}
-            >
-              <div className="text-2xl md:text-3xl font-bold text-white mb-1">{stat.number}</div>
-              <div className="text-white/60 text-sm">{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Value Proposition */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="mb-20"
-        >
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
-              Transform Your Marketing with AI Precision
-            </h2>
-            <p className="text-white/70 text-lg mb-8 leading-relaxed">
-              Foundry.AI combines cutting-edge artificial intelligence with proven marketing psychology 
-              to generate high-converting copy and comprehensive brand identities. Whether you're launching 
-              a startup or scaling an enterprise, our AI agents deliver professional-grade marketing assets 
-              in seconds, not weeks.
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-              <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                <Sparkles className="w-8 h-8 text-white mb-4" />
-                <h3 className="text-white font-bold mb-2">Instant Generation</h3>
-                <p className="text-white/60 text-sm">Get professional marketing copy and brand assets in under 30 seconds</p>
-              </div>
-              <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                <Brain className="w-8 h-8 text-white mb-4" />
-                <h3 className="text-white font-bold mb-2">Psychology-Driven</h3>
-                <p className="text-white/60 text-sm">Every output is optimized using proven conversion psychology principles</p>
-              </div>
-              <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                <Rocket className="w-8 h-8 text-white mb-4" />
-                <h3 className="text-white font-bold mb-2">Scale Ready</h3>
-                <p className="text-white/60 text-sm">From startup MVPs to enterprise campaigns, built to scale with you</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Main Feature Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
-          {/* Copy Generator Section */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 1.0 }}
-            className="group relative"
+          <motion.p
+            className="text-sm sm:text-base text-white/50 mt-6 max-w-2xl mx-auto"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.8 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl blur-xl group-hover:from-white/10 transition-all duration-500"></div>
-            <div className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 h-full">
-              <div className="flex items-center justify-center mb-6">
-                <div className="relative">
-                  <Sparkles className="w-12 h-12 text-white" />
-                  <div className="absolute inset-0 w-12 h-12 bg-white/20 rounded-full blur-lg animate-pulse"></div>
-                </div>
-              </div>
-              
-              <h2 className="text-3xl font-bold text-white mb-4">Copy Intelligence</h2>
-              <p className="text-white/70 mb-8 leading-relaxed">
-                Generate high-converting marketing copy that drives action. Our AI analyzes millions 
-                of successful campaigns to create compelling headlines, captions, emails, and landing pages 
-                that resonate with your audience and maximize conversions.
-              </p>
-              
-              <div className="grid grid-cols-1 gap-4 mb-8">
-                {copyFeatures.map((feature, index) => (
-                  <motion.div 
-                    key={index} 
-                    className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors"
-                    whileHover={{ x: 5 }}
-                  >
-                    <feature.icon className="w-5 h-5 text-white/60 mt-1 flex-shrink-0" />
-                    <div>
-                      <h4 className="text-white font-semibold text-sm">{feature.title}</h4>
-                      <p className="text-white/50 text-xs leading-relaxed">{feature.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+            Leveraging Advanced Neural Networks & Decentralized GPU Power via IO.net
+          </motion.p>
+        </header>
 
-              <motion.button
-                onClick={onCopyGeneratorClick}
-                className="w-full bg-white text-black py-4 rounded-xl font-bold text-lg hover:bg-white/90 transition-all duration-300 group flex items-center justify-center relative overflow-hidden"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                <Sparkles className="mr-2 w-5 h-5" />
-                Generate Copy
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-            </div>
-          </motion.div>
-
-          {/* Brand Kit Section */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            className="group relative"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent rounded-2xl blur-xl group-hover:from-purple-500/20 transition-all duration-500"></div>
-            <div className="relative bg-gradient-to-br from-[#1a1a1a] via-[#1a1a1a] to-[#2a1a2a] rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all duration-500 h-full">
-              <div className="flex items-center justify-center mb-6">
-                <div className="relative">
-                  <Palette className="w-12 h-12 text-white" />
-                  <div className="absolute inset-0 w-12 h-12 bg-purple-500/30 rounded-full blur-lg animate-pulse"></div>
-                </div>
-              </div>
-              
-              <h2 className="text-3xl font-bold text-white mb-4">Brand Intelligence</h2>
-              <p className="text-white/70 mb-8 leading-relaxed">
-                Build a complete brand foundation from the ground up. Our AI creates comprehensive 
-                brand identities including visual themes, color psychology, target audience analysis, 
-                voice guidelines, and strategic marketing roadmaps tailored to your vision.
-              </p>
-              
-              <div className="grid grid-cols-1 gap-4 mb-8">
-                {brandFeatures.map((feature, index) => (
-                  <motion.div 
-                    key={index} 
-                    className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors"
-                    whileHover={{ x: 5 }}
-                  >
-                    <feature.icon className="w-5 h-5 text-purple-400/80 mt-1 flex-shrink-0" />
-                    <div>
-                      <h4 className="text-white font-semibold text-sm">{feature.title}</h4>
-                      <p className="text-white/50 text-xs leading-relaxed">{feature.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.button
-                onClick={onBrandKitClick}
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white py-4 rounded-xl font-bold text-lg hover:from-purple-500 hover:to-purple-400 transition-all duration-300 group flex items-center justify-center relative overflow-hidden"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                <Palette className="mr-2 w-5 h-5" />
-                Create Brand Kit
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
-        {/* Trust Indicators */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.4 }}
-          className="text-white/40 text-xs sm:text-sm space-y-2"
-        >
-          <div className="flex items-center justify-center space-x-4 sm:space-x-6 flex-wrap">
+        <Section className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Transform Your Marketing with AI Precision</h2>
+          <p className="text-white/70 sm:text-lg mb-10 leading-relaxed">Foundry.AI combines cutting-edge AI with proven marketing psychology to generate high-converting copy and comprehensive brand identities in seconds.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             {[
-              { color: 'green-500', label: 'No signup required' },
-              { color: 'blue-500', label: 'Data stored locally' },
-              { color: 'purple-500', label: 'Instant results' },
-              { color: 'yellow-500', label: 'Enterprise ready' }
-            ].map(({ color, label }, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <div className={`w-2 h-2 bg-${color} rounded-full animate-pulse`} />
-                <span>{label}</span>
+              { icon: Sparkles, title: "Instant Generation", desc: "Get marketing assets in under 30 seconds." },
+              { icon: Brain, title: "Psychology-Driven", desc: "Optimized using proven conversion principles." },
+              { icon: Rocket, title: "Scale Ready", desc: "From startup MVPs to enterprise campaigns." }
+            ].map((card, index) => (
+              <div key={index} className="bg-white/5 rounded-xl p-6 border border-white/10 backdrop-blur-md">
+                <card.icon className="w-8 h-8 text-white mb-4" />
+                <h3 className="text-white font-bold text-lg mb-2">{card.title}</h3>
+                <p className="text-white/60 text-sm">{card.desc}</p>
               </div>
             ))}
           </div>
-        </motion.div>
+        </Section>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
+          {[
+            { type: 'copy', title: "Copy Intelligence", desc: "Generate high-converting marketing copy that drives action. Our AI analyzes successful campaigns to create compelling content that resonates and converts.", features: copyFeatures, buttonText: "Generate Copy", buttonIcon: Sparkles, action: onCopyGeneratorClick, gradient: "from-blue-500 to-cyan-500" },
+            { type: 'brand', title: "Brand Intelligence", desc: "Build a complete brand foundation from the ground up. Our AI creates brand identities, including visual themes, audience analysis, and strategic roadmaps.", features: brandFeatures, buttonText: "Create Brand-Kit", buttonIcon: Palette, action: onBrandKitClick, gradient: "from-purple-600 to-pink-500" }
+          ].map((card) => (
+            <Section key={card.type}>
+              <div
+                className="relative bg-black/40 rounded-2xl p-6 sm:p-8 h-full flex flex-col border border-white/10 transition-all duration-300 hover:border-white/20 hover:bg-black/60"
+              >
+                <div className="flex-grow">
+                  <div className="flex flex-col items-center text-center mb-8">
+                    <div className={`relative mb-4 p-4 bg-white/10 rounded-full border border-white/10`}>
+                      <card.buttonIcon className="w-10 h-10 text-white" />
+                    </div>
+                    <h2 className="text-3xl sm:text-4xl font-bold text-white">{card.title}</h2>
+                  </div>
+                  <p className="text-white/70 mb-8 text-center text-sm sm:text-base leading-relaxed">{card.desc}</p>
+                  <div className="space-y-4 mb-8">
+                    {card.features.map((feature, index) => (
+                      <div key={index} className="flex items-start gap-4 p-3 rounded-lg bg-white/5 transition-colors hover:bg-white/10">
+                        <feature.icon className={`w-6 h-6 ${card.type === 'brand' ? 'text-purple-300' : 'text-blue-300'} mt-1 flex-shrink-0`} />
+                        <div>
+                          <h4 className="text-white font-semibold">{feature.title}</h4>
+                          <p className="text-white/50 text-sm leading-relaxed">{feature.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <motion.button
+                  onClick={card.action}
+                  className={`w-full mt-auto bg-gradient-to-r ${card.gradient} text-white py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center`}
+                  whileHover={{ scale: 1.05, boxShadow: `0px 0px 20px rgba(${card.type === 'brand' ? '192, 132, 252, 0.4' : '59, 130, 246, 0.4'})` }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <card.buttonIcon className="mr-2 w-5 h-5" />{card.buttonText}<ArrowRight className="ml-2 w-5 h-5" />
+                </motion.button>
+              </div>
+            </Section>
+          ))}
+        </div>
+
+        {/* This section now acts as a standard footer at the end of the page content */}
+        <Section className="text-center text-white/40 text-xs sm:text-sm">
+          <div className="flex items-center justify-center gap-x-4 sm:gap-x-6 gap-y-2 flex-wrap">
+            <div className="flex items-center gap-2"><Star className="w-4 h-4 text-green-500" /><span>No Signup Required</span></div>
+            <div className="flex items-center gap-2"><Globe className="w-4 h-4 text-blue-500" /><span>Data Stored Locally</span></div>
+            <div className="flex items-center gap-2"><Rocket className="w-4 h-4 text-purple-500" /><span>Instant Results</span></div>
+          </div>
+        </Section>
+        
       </div>
     </section>
   );
