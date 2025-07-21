@@ -11,6 +11,7 @@ import {
   Brain,
   Rocket,
   Star,
+  Github,
 } from 'lucide-react';
 
 interface HeroProps {
@@ -184,6 +185,15 @@ const Hero: React.FC<HeroProps> = ({ onCopyGeneratorClick, onBrandKitClick }) =>
         {/* This section now acts as a standard footer at the end of the page content */}
         <Section className="text-center text-white/40 text-xs sm:text-sm">
           <div className="flex items-center justify-center gap-x-4 sm:gap-x-6 gap-y-2 flex-wrap">
+            <a
+  href="https://github.com/ayaanoski"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center gap-2  hover:underline"
+>
+  <Github className="w-4 h-4 text-red-500" />
+  <span>developed by @ayaanoski</span>
+</a>
             <div className="flex items-center gap-2"><Star className="w-4 h-4 text-green-500" /><span>No Signup Required</span></div>
             <div className="flex items-center gap-2"><Globe className="w-4 h-4 text-blue-500" /><span>Data Stored Locally</span></div>
             <div className="flex items-center gap-2"><Rocket className="w-4 h-4 text-purple-500" /><span>Instant Results</span></div>
